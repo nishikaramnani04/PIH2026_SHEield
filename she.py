@@ -5,7 +5,10 @@ import hashlib
 import os
 
 # ---------------- DATABASE ----------------
-DB_NAME = "sheild_users.db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_NAME = os.path.join(BASE_DIR, "sheild_users.db")
+
+print("Database Location:", DB_NAME)  # optional for checking
 
 def setup_database():
     conn = sqlite3.connect(DB_NAME)
