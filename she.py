@@ -19,23 +19,17 @@ try:
     WHATSAPP_AVAILABLE = True
 except ImportError:
     WHATSAPP_AVAILABLE = False
-
-# ─────────────────────────────────────────
 #  CONFIGURATION 
-# ─────────────────────────────────────────
 SENDER_EMAIL    = "mahistodankar@gmail.com"      # Your Gmail address
 SENDER_PASSWORD = "todankar_0508"         # Gmail App Password
 
 # WhatsApp config – numbers must include country code, e.g. "+919876543210"
 WHATSAPP_ENABLED = True   # Set False to disable WhatsApp alerts
-# ─────────────────────────────────────────
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_NAME  = os.path.join(BASE_DIR, "sheild_v2.db")
 
-# ══════════════════════════════════════════════════════
 #  THEME  –  Deep-crimson guardian palette
-# ══════════════════════════════════════════════════════
 C = {
     "bg":        "#0D0D14",   # near-black background
     "surface":   "#13131F",   # card surface
@@ -59,11 +53,7 @@ FONT_SMALL  = ("Helvetica", 9)
 FONT_MONO   = ("Courier", 9)
 FONT_SOS    = ("Georgia", 22, "bold")
 FONT_LABEL  = ("Helvetica", 10, "bold")
-
-# ══════════════════════════════════════════════════════
 #  DATABASE  –  single-connection, queue-serialised
-# ══════════════════════════════════════════════════════
-#
 # ROOT CAUSE of "database is locked":
 #   SQLite in its default journal mode only allows ONE writer at a time.
 #   Opening a fresh connection from every thread causes collisions.
@@ -167,10 +157,7 @@ def setup_database():
         timestamp TEXT,
         status TEXT DEFAULT 'SENT'
     )""")
-
-# ══════════════════════════════════════════════════════
 #  PASSWORD HELPERS
-# ══════════════════════════════════════════════════════
 def hash_password(password, salt=None):
     if salt is None:
         salt = os.urandom(16)
@@ -180,10 +167,7 @@ def hash_password(password, salt=None):
 def verify_password(stored_hash, stored_salt, password):
     salt = bytes.fromhex(stored_salt)
     return hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000).hex() == stored_hash
-
-# ══════════════════════════════════════════════════════
 #  LIVE LOCATION (IP-based approximation)
-# ══════════════════════════════════════════════════════
 def get_live_location():
     try:
         url  = "http://ip-api.com/json/?fields=status,city,regionName,country,lat,lon,query"
@@ -203,10 +187,7 @@ def get_live_location():
     except Exception:
         pass
     return {"display": "Location unavailable", "lat": 0, "lon": 0, "maps": ""}
-
-# ══════════════════════════════════════════════════════
 #  EMAIL / SOS
-# ══════════════════════════════════════════════════════
 def build_sos_email(user_name, user_phone, loc):
     maps_link = loc.get("maps", "")
     timestamp = datetime.now().strftime("%d %b %Y  %H:%M:%S")
@@ -334,10 +315,7 @@ def trigger_sos(user_phone, user_name, status_callback=None):
         if status_callback:
             status_callback(email_sent, wa_sent, loc.get("display","Unknown"))
     threading.Thread(target=_run, daemon=True).start()
-
-# ══════════════════════════════════════════════════════
 #  PHONE CALL HELPER
-# ══════════════════════════════════════════════════════
 def make_call(number):
     system = platform.system()
     if system == "Windows":
@@ -350,10 +328,7 @@ def make_call(number):
             subprocess.Popen(["xdg-open", f"tel:{number}"])
         except Exception:
             webbrowser.open(f"tel:{number}")
-
-# ══════════════════════════════════════════════════════
 #  REUSABLE UI HELPERS
-# ══════════════════════════════════════════════════════
 def styled_entry(parent, show="", width=28):
     e = tk.Entry(parent, show=show, width=width,
                  font=FONT_BODY, bg=C["border"], fg=C["text"],
@@ -381,10 +356,7 @@ def card_frame(parent, **kw):
 
 def divider(parent, pady=10):
     tk.Frame(parent, height=1, bg=C["border"]).pack(fill="x", pady=pady)
-
-# ══════════════════════════════════════════════════════
 #  REGISTER WINDOW
-# ══════════════════════════════════════════════════════
 class RegisterWindow:
     def __init__(self, parent):
         self.win = tk.Toplevel(parent)
@@ -444,10 +416,7 @@ class RegisterWindow:
         except sqlite3.IntegrityError:
             messagebox.showerror("Already Registered",
                                  "This phone number is already registered.", parent=self.win)
-
-# ══════════════════════════════════════════════════════
 #  DASHBOARD
-# ══════════════════════════════════════════════════════
 class Dashboard:
     def __init__(self, user_phone, user_name):
         self.phone = user_phone
@@ -465,7 +434,7 @@ class Dashboard:
         self._start_clock()
         self._update_location_label()
 
-    # ── LAYOUT ──────────────────────────────────────
+    # ── LAYOUT
     def _build_layout(self):
         # Top bar
         topbar = tk.Frame(self.win, bg=C["panel"], height=56)
@@ -849,10 +818,7 @@ class Dashboard:
                   command=popup.destroy).pack(side="left", padx=(10, 0))
 
         entries["name"].focus_set()
-
-# ══════════════════════════════════════════════════════
 #  LOGIN SCREEN
-# ══════════════════════════════════════════════════════
 class LoginSystem:
     def __init__(self, root):
         self.root = root
