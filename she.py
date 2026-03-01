@@ -20,8 +20,8 @@ try:
 except ImportError:
     WHATSAPP_AVAILABLE = False
 #  CONFIGURATION 
-SENDER_EMAIL    = "mahistodankar@gmail.com"      # Your Gmail address
-SENDER_PASSWORD = "todankar_0508"         # Gmail App Password
+SENDER_EMAIL    = "nishikaramnani@gmail.com"      # Your Gmail address
+SENDER_PASSWORD = "gdmzxjobijkulcur"         # Gmail App Password
 
 # WhatsApp config – numbers must include country code, e.g. "+919876543210"
 WHATSAPP_ENABLED = True   # Set False to disable WhatsApp alerts
