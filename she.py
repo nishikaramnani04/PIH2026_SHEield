@@ -23,8 +23,8 @@ except ImportError:
 # ─────────────────────────────────────────
 #  CONFIGURATION 
 # ─────────────────────────────────────────
-SENDER_EMAIL    = "your_email@gmail.com"      # Your Gmail address
-SENDER_PASSWORD = "your_app_password"         # Gmail App Password
+SENDER_EMAIL    = "mahistodankar@gmail.com"      # Your Gmail address
+SENDER_PASSWORD = "todankar_0508"         # Gmail App Password
 
 # WhatsApp config – numbers must include country code, e.g. "+919876543210"
 WHATSAPP_ENABLED = True   # Set False to disable WhatsApp alerts
